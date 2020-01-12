@@ -1,0 +1,14 @@
+{
+  "dialogData": [
+    {
+      "name": "JC",
+      "height": 179,
+      "weight": 60
+    },
+    {
+      "name": "Ken",
+      "height": 168,
+      "weight": 55
+    }
+  ]
+}

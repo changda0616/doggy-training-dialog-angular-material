@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>Hi {{ yourName }}</h1>
+<div mat-dialog-content>
+  <p>請輸入您的基本資料</p>
+
+  <!-- - 使用此 mat-form-field 元素標籤，
+          請確保已將 matInput 指令添加到元素屬性中，
+          且必須要在 app.module.tw 中引用 MatInputModule
+       - placeholder 為灰字背景提示訊息
+       - mat-label 可以讓輸入視窗有一個外框的感覺 -->
+  <p>
+    <mat-form-field appearance="outline">
+      <textarea matInput [(ngModel)]="data.name" placeholder="姓名"></textarea>
+      <mat-hint>*Not Null</mat-hint>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="standard">
+      <mat-label>您的身高 (cm)</mat-label>
+      <input matInput [(ngModel)]="data.height" placeholder="身高" />
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="standard">
+      <mat-label>您的體重 (kg)</mat-label>
+      <input matInput [(ngModel)]="data.weight" placeholder="體重" />
+    </mat-form-field>
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">取消</button>
+  <button mat-button (click)="onResetClick()">重置</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>存檔</button>
+</div>

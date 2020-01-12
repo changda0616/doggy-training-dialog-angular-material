@@ -1,0 +1,6 @@
+<h3 id="title-h3">{{ title }}</h3>
+
+<div class="list-item" *ngFor="let data of apiData">
+  <button mat-raised-button (click)="openDialog($event)">{{ data.name }}</button>
+  => [ 身高 ]：{{ data.height }}、[ 體重 ]: {{ data.weight }}
+</div>

@@ -1,0 +1,14 @@
+#title-h3 {
+  text-align: -webkit-center;
+}
+
+.list-item {
+  margin: 10px;
+  font-size: 18px;
+}
+.list-item input[type=checkbox] {
+  margin-right: 20px;
+}
+.list-item button {
+  margin-left: 80px;
+}
