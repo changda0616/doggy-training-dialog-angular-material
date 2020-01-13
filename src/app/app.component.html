@@ -4,3 +4,12 @@
   <button mat-raised-button (click)="openDialog(data)">{{ data.name }}</button>
   => [ 身高 ]：{{ data.height }}、[ 體重 ]: {{ data.weight }}
 </div>
+
+
+<app-dialog-template
+  *ngIf="isDialogOpened"
+  [data]="dialogData"
+  (cancel)="isDialogOpened=false"
+  (confirm)="handleConfirm($event)"
+>
+</app-dialog-template>

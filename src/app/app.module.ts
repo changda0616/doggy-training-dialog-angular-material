@@ -7,11 +7,13 @@ import { AppComponent } from './app.component';
 import { DialogTempComponent } from './dialog-temp/dialog-temp.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { DialogTemplateComponent } from './dialog-template/dialog-template.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DialogTempComponent
+    DialogTempComponent,
+    DialogTemplateComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +23,6 @@ import { HttpClientModule } from '@angular/common/http';
     MatDialogModule,
     MatInputModule,
     MatButtonModule,
-
     BrowserAnimationsModule
   ],
   providers: [

@@ -1,0 +1,33 @@
+<div class="wrapper">
+  <div>
+    <p>請輸入您的基本資料</p>
+    <p>
+      <mat-form-field appearance="outline">
+        <textarea matInput [(ngModel)]="viewModel.name" placeholder="姓名"></textarea>
+        <mat-hint>*Not Null</mat-hint>
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="standard">
+        <mat-label>您的身高 (cm)</mat-label>
+        <input matInput [(ngModel)]="viewModel.height" placeholder="身高" />
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="standard">
+        <mat-label>您的體重 (kg)</mat-label>
+        <input matInput [(ngModel)]="viewModel.weight" placeholder="體重" />
+      </mat-form-field>
+    </p>
+
+    <div>
+      <button mat-button (click)="cancel.emit()">取消</button>
+      <button mat-button (click)="reset()">重置</button>
+      <button mat-button (click)="confirm.emit(viewModel)">存檔</button>
+    </div>
+  </div>
+
+
+</div>

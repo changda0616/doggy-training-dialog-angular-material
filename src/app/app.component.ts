@@ -13,13 +13,14 @@ import { of } from 'rxjs';
 })
 
 export class AppComponent implements OnInit {
+  isDialogOpened: boolean;
 
   api = 'http://localhost:3000/dialogData';
 
   title = 'Angular-Demo2';
 
   apiData: IDialogData[];
-  dialogDate: IDialogData;
+  dialogData: IDialogData;
 
   // 注意
   //    - 使用 NgModule 要記得在 app.module.ts 中引用 FormsModule
@@ -59,32 +60,18 @@ export class AppComponent implements OnInit {
    * @param Event event 點擊事件物件
    */
   openDialog(data: IDialogData): void {
+    this.isDialogOpened = true;
+    this.dialogData = data;
+  }
 
-
-    // 取得按鈕選取的資料
-
-
-    console.log(`要傳遞到 Dialog 組件內的物件內容
-                     ${data.name}
-                     ${data.height}
-                     ${data.weight}`);
-
-                     // 2.開啟 Dialog 組件視窗
-    const dialogRef = this.dialog.open(DialogTempComponent, {
-      // height: '800px',
-      // width: '400px',
-      data: data // 將查找到的 DialogData 物件傳遞到子元件當中
-    });
-
-    // 2.Dialog 組件視窗關閉後的操作動作
-    dialogRef.afterClosed().pipe(
-      filter(item => !!item),
-      switchMap(item => this.http.put(this.api + '/' + item.id, item)),
+  handleConfirm(data: IDialogData) {
+    this.http.put(this.api + '/' + data.id, data).pipe(
       switchMap(_ => this.getData('')),
       catchError(error => {
         alert('更新失敗');
         return of(this.apiData);
-      })
+      }),
+      finalize(() => {this.isDialogOpened = false;})
     ).subscribe((value: IDialogData[]) => { // result 是此關閉事件的物件並不是 dialog-temp 組件傳來的內容
       this.apiData = value;
     });
