@@ -3,6 +3,7 @@
  *  - [姓名、身高、體重]
  */
 export interface IDialogData {
+  id: number,
   /* 姓名 */
   name: string;
   /* 身高 */

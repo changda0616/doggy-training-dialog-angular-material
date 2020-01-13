@@ -3,7 +3,8 @@ import { MatDialog } from '@angular/material';
 import { DialogTempComponent } from './dialog-temp/dialog-temp.component';
 import { IDialogData } from './Domain/IDialogData';
 import { HttpClient } from '@angular/common/http';
-import { finalize } from 'rxjs/operators';
+import { finalize, switchMap, filter, tap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { finalize } from 'rxjs/operators';
 
 export class AppComponent implements OnInit {
 
-  api = 'http://localhost:3000/dialogData?name_like=';
+  api = 'http://localhost:3000/dialogData';
 
   title = 'Angular-Demo2';
 
@@ -45,7 +46,7 @@ export class AppComponent implements OnInit {
    * @returns 回傳訪問 API 回來的資料內容
    */
   private getData(url: string) {
-    return this.http.get(this.api + url).pipe(
+    return this.http.get(this.api + '?name_like= '+ url).pipe(
       finalize(() => {
         console.log('complete');  // 每一個 request 收到成功 response 隨即結束
       })
@@ -57,37 +58,35 @@ export class AppComponent implements OnInit {
    *
    * @param Event event 點擊事件物件
    */
-  openDialog(event: MouseEvent): void {
+  openDialog(data: IDialogData): void {
 
-    // 1.抓取 HTML 事件，必須先做轉型成 HTML 物件，才可對此物件進行操作
-    const target = event.target as HTMLButtonElement;
-    console.log('抓取到的按鈕名稱 ' + target.innerText);
 
     // 取得按鈕選取的資料
-    this.getData(target.innerText).subscribe((value: IDialogData[]) => {
-      if (value.length === 1) {
-        this.dialogDate = value[0];
 
-        console.log(`要傳遞到 Dialog 組件內的物件內容
-                     ${this.dialogDate.name}
-                     ${this.dialogDate.height}
-                     ${this.dialogDate.weight}`);
-      }
-    });
 
-    // 2.開啟 Dialog 組件視窗
+    console.log(`要傳遞到 Dialog 組件內的物件內容
+                     ${data.name}
+                     ${data.height}
+                     ${data.weight}`);
+
+                     // 2.開啟 Dialog 組件視窗
     const dialogRef = this.dialog.open(DialogTempComponent, {
       // height: '800px',
       // width: '400px',
-      data: this.dialogDate // 將查找到的 DialogData 物件傳遞到子元件當中
+      data: data // 將查找到的 DialogData 物件傳遞到子元件當中
     });
 
     // 2.Dialog 組件視窗關閉後的操作動作
-    dialogRef.afterClosed().subscribe(result => { // result 是此關閉事件的物件並不是 dialog-temp 組件傳來的內容
-      console.log(`關閉事件後的 DialogData 物件資料內容
-                     ${this.dialogDate.name}
-                     ${this.dialogDate.height}
-                     ${this.dialogDate.weight}`);
+    dialogRef.afterClosed().pipe(
+      filter(item => !!item),
+      switchMap(item => this.http.put(this.api + '/' + item.id, item)),
+      switchMap(_ => this.getData('')),
+      catchError(error => {
+        alert('更新失敗');
+        return of(this.apiData);
+      })
+    ).subscribe((value: IDialogData[]) => { // result 是此關閉事件的物件並不是 dialog-temp 組件傳來的內容
+      this.apiData = value;
     });
   }
 }
